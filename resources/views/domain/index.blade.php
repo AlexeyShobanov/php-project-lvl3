@@ -4,11 +4,8 @@
         <title>Laravel</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     </head>
+
     <body>
-        <div class="container">
-            @include('flash::message')
-        </div>
-        
         <div>
             <ul>
                 <li>
@@ -19,25 +16,20 @@
                 </li>
             </ul>
         </div>
+        <h1>Domains</h1>
 
-        <h1>Page Analyzer</h1>
-        <h3>Check web pages for free</h3>
-        <hr>
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+            @foreach($domains as $domain)
+                <tr>
+                    <td>{{ $domain->id }}</td>
+                    <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
+                </tr>
+            @endforeach
 
-         @if ($errors->any())
-            <div>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        {{ Form::open(['url' => route('store')]) }}
-            {{ Form::text('name', '', array('placeholder'=>'https://www.example.com')) }}
-            {{ Form::submit('Submit') }}
-        {{ Form::close() }}
 
         <script src="//code.jquery.com/jquery.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
