@@ -57,7 +57,7 @@ class WelcomeController extends Controller
 
         $normalizedUrl = $scheme . $host;
 
-        if(!empty(\DB::table('domains')->where('name', $normalizedUrl)->get()->all())) {
+        if (!empty(\DB::table('domains')->where('name', $normalizedUrl)->get()->all())) {
             flash('Url already added')->warning();
             return redirect()
             ->route('index');
