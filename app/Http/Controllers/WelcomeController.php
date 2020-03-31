@@ -40,12 +40,13 @@ class WelcomeController extends Controller
             'name' => 'required|min:3'
         ]);
 
-        $parsedUrl = parse_url($url['name']);
-        if (!$url) {
+        if (!$url['name']) {
             flash('Not a valid url')->error();
             return redirect()
             ->route('index');
         }
+
+        $parsedUrl = parse_url($url['name']);
 
         $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
         $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
