@@ -3,38 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Domain;
+use App\DomainCheck;
 use Illuminate\Http\Request;
 
-class DomainController extends Controller
+class DomainCheckController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  \App\Domain  $domain
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Domain $domain)
     {
-        $domains = \DB::table('domains')
-        ->groupBy('id')
-        ->get();
-        $timeLastChecks = $domains->reduce(
-            function ($acc, $domain) {
-                $timeLastCheck = \DB::table('domain_checks')
-                ->where('domain_id', $domain->id)
-                ->max('updated_at');
-                return array_merge($acc, [$domain->id => $timeLastCheck]);
-            },
-            []
-        );
-        return view('domain.index', compact('domains', 'timeLastChecks'));
+        //
     }
 
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \App\Domain  $domain
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Domain $domain)
     {
         //
     }
@@ -43,31 +34,40 @@ class DomainController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Domain  $domain
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Domain $domain)
     {
-        //
+        $check = $domain->checks()->make();
+        $check->status_code = 200;
+        //$check->fill($request->except('_token'));
+        $check->save();
+
+        return redirect()
+            ->route('domains.show', compact('domain'));
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Domain  $domain
+     * @param  \App\DomainCheck  $domainCheck
      * @return \Illuminate\Http\Response
      */
-    public function show(Domain $domain)
+    public function show(Domain $domain, DomainCheck $domainCheck)
     {
-        return view('domain.show', compact('domain'));
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Domain  $domain
+     * @param  \App\DomainCheck  $domainCheck
      * @return \Illuminate\Http\Response
      */
-    public function edit(Domain $domain)
+    public function edit(Domain $domain, DomainCheck $domainCheck)
     {
         //
     }
@@ -77,9 +77,10 @@ class DomainController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Domain  $domain
+     * @param  \App\DomainCheck  $domainCheck
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Domain $domain)
+    public function update(Request $request, Domain $domain, DomainCheck $domainCheck)
     {
         //
     }
@@ -88,9 +89,10 @@ class DomainController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Domain  $domain
+     * @param  \App\DomainCheck  $domainCheck
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Domain $domain)
+    public function destroy(Domain $domain, DomainCheck $domainCheck)
     {
         //
     }

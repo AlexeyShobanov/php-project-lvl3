@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/', 'WelcomeController');
 Route::resource('/domains', 'DomainController');
+Route::resource('/domains.checks', 'DomainCheckController');

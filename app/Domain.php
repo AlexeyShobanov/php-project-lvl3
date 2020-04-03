@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Domain extends Model
 {
     protected $fillable = ['name'];
+
+    public function checks()
+    {
+        return $this->hasMany(__NAMESPACE__ . '\DomainCheck');
+    }
 }

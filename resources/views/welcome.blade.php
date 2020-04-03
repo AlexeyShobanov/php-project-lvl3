@@ -36,7 +36,7 @@
 
         {{ Form::open(['url' => route('store')]) }}
             {{ Form::text('name', '', array('placeholder'=>'https://www.example.com')) }}
-            {{ Form::submit('Submit') }}
+            {{ Form::submit('Add') }}
         {{ Form::close() }}
 
         <script src="//code.jquery.com/jquery.js"></script>

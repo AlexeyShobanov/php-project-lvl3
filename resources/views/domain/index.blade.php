@@ -22,15 +22,15 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Сheck date</th>
             </tr>
             @foreach($domains as $domain)
                 <tr>
                     <td>{{ $domain->id }}</td>
                     <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
+                    <td>{{ \DB::table('domain_checks')->where('domain_id', $domain->id)->max('updated_at') }}</td>
                 </tr>
             @endforeach
-
-
         <script src="//code.jquery.com/jquery.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 

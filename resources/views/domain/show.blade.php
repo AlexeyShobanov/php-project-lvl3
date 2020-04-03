@@ -6,15 +6,6 @@
     </head>
 
     <body>
-        @if ($errors->any())
-            <div>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <div class="container">
             @include('flash::message')
         </div>
@@ -43,13 +34,37 @@
                 </tr>        
                 <tr>
                     <td>created_at</td>
-                    <td>2020-02-27 20:18:09</td>
+                    <td>{{$domain->created_at}}</td>
                 </tr>
                 <tr>
                     <td>updated_at</td>
-                    <td>2020-02-27 20:18:09</td>
+                    <td>{{$domain->updated_at}}</td>
                 </tr>
             </table>
+
+            <h2 class="mb-3">Checks</h2>
+             @if ($errors->any())
+            <div>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            {{ Form::open(['url' => route('domains.checks.store', $domain)]) }}
+                {{ Form::submit('Run check') }}
+            {{ Form::close() }}
+
+            <table class="table">
+                @foreach($domain->checks as $check)
+                <tr>
+                    <td>{{$check->domain_id}}</td>
+                    <td>{{$check->updated_at}}</td>
+                </tr>
+                @endforeach
+            </table>
+
         </div>
 
         <script src="//code.jquery.com/jquery.js"></script>
