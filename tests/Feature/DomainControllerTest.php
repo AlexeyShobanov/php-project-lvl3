@@ -32,7 +32,6 @@ class DomainControllerTest extends TestCase
         $response = $this->post(route('store'), ['name' => $normalizedUrl]);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
-        //$domain = \DB::table('domains')->where('name', $normalizedUrl)->first();
         $domain = \DB::table('domains')->where('name', $normalizedUrl)->value('id');
         $response = $this->get(route('domains.show', ['domain' => $domain]));
         $response->assertStatus(200);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domain;
 use App\DomainCheck;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class DomainCheckController extends Controller
 {
@@ -39,10 +40,11 @@ class DomainCheckController extends Controller
      */
     public function store(Request $request, Domain $domain)
     {
-        $redirectResponse = redirect($domain);
+        //$redirectResponse = redirect()->away($domain->name);
+        $response = Http::get($domain->name);
 
         $check = $domain->checks()->make();
-        $check->status_code = $redirectResponse->getStatusCode();
+        $check->status_code = $response->status();
         $check->save();
 
         return redirect()
@@ -97,10 +99,4 @@ class DomainCheckController extends Controller
     {
         //
     }
-
-    protected function redirect(Domain $domain)
-    {
-        return redirect()->away($domain->name);
-    }
-
 }
