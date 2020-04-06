@@ -39,9 +39,10 @@ class DomainCheckController extends Controller
      */
     public function store(Request $request, Domain $domain)
     {
+        $redirectResponse = redirect($domain);
+
         $check = $domain->checks()->make();
-        $check->status_code = 200;
-        //$check->fill($request->except('_token'));
+        $check->status_code = $redirectResponse->getStatusCode();
         $check->save();
 
         return redirect()
@@ -96,4 +97,10 @@ class DomainCheckController extends Controller
     {
         //
     }
+
+    protected function redirect(Domain $domain)
+    {
+        return redirect()->away($domain->name);
+    }
+
 }

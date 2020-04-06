@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Domain;
+//use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class WelcomeControllerTest extends TestCase
 {
@@ -12,6 +14,21 @@ class WelcomeControllerTest extends TestCase
     {
         parent::setUp();
         factory(Domain::class, 2)->make();
+    }
+
+    protected function prepareTestData () {
+        $factoryData = factory(Domain::class)->make()->toArray();
+        $url = \Arr::only($factoryData, ['name']);
+        $parsedUrl = parse_url($url['name']);
+        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : 'https://';
+        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
+        $normalizedUrl = $scheme . $host;
+        return $normalizedUrl;
+        /*
+        return Http::fake([
+            $normalizedUrl => Http::response('Hello World', 200, ['Headers']),
+        ]);
+        */
     }
 
     public function testIndex()
@@ -22,17 +39,11 @@ class WelcomeControllerTest extends TestCase
 
     public function testStore()
     {
-        $factoryData = factory(Domain::class)->make()->toArray();
-        $url = \Arr::only($factoryData, ['name']);
-
-        $parsedUrl = parse_url($url['name']);
-        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : 'https://';
-        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-        $normalizedUrl = $scheme . $host;
-        $response = $this->post(route('store'), ['name' => $normalizedUrl]);
+        $url = $this->prepareTestData();
+        $response = $this->post(route('store'), ['name' => $url]);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
 
-        $this->assertDatabaseHas('domains', ['name' => $normalizedUrl]);
+        $this->assertDatabaseHas('domains', ['name' => $url]);
     }
 }

@@ -10,6 +10,6 @@ class Domain extends Model
 
     public function checks()
     {
-        return $this->hasMany(__NAMESPACE__ . '\DomainCheck');
+        return $this->hasMany('App\DomainCheck');
     }
 }

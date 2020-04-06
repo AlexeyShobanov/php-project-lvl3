@@ -28,7 +28,7 @@
                 <tr>
                     <td>{{ $domain->id }}</td>
                     <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
-                    <td>{{ \DB::table('domain_checks')->where('domain_id', $domain->id)->max('updated_at') }}</td>
+                    <td>{{ $timeLastChecks['id' . $domain->id] }}</td>
                 </tr>
             @endforeach
         <script src="//code.jquery.com/jquery.js"></script>

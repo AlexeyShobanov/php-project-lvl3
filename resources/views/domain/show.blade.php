@@ -59,7 +59,7 @@
             <table class="table">
                 @foreach($domain->checks as $check)
                 <tr>
-                    <td>{{$check->domain_id}}</td>
+                    <td>{{$check->status_code}}</td>
                     <td>{{$check->updated_at}}</td>
                 </tr>
                 @endforeach

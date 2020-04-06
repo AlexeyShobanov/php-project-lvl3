@@ -8,6 +8,6 @@ class DomainCheck extends Model
 {
    public function domain()
     {
-        return $this->belongsTo(__NAMESPACE__ . '\Domain');
+        return $this->belongsTo('App\Domain');
     }
 }
