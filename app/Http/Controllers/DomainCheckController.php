@@ -45,7 +45,7 @@ class DomainCheckController extends Controller
     public function store(Request $request, Domain $domain)
     {
         try {
-            $response = Http::timeout(3)->get($domain->name);
+            $response = Http::get($domain->name);
         } catch (ConnectionException $e) {
             flash('Connection timed out')->error();
             return redirect()
