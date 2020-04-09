@@ -24,11 +24,8 @@ class DomainControllerTest extends TestCase
     {
         $factoryData = factory(Domain::class)->make()->toArray();
         $url = \Arr::only($factoryData, ['name']);
-
         $parsedUrl = parse_url($url['name']);
-        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : 'https://';
-        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-        $normalizedUrl = $scheme . $host;
+        $normalizedUrl = $parsedUrl['scheme'] . "://" . $parsedUrl['host'];
         $response = $this->post(route('store'), ['name' => $normalizedUrl]);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302);

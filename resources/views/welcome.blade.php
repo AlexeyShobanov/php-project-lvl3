@@ -1,50 +1,21 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Laravel</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    </head>
-    <body>
-        <div class="container">
-            @include('flash::message')
-        </div>
-        
-        <div>
-            <ul>
-                <li>
-                    <a href="{{ route('index') }}">Home</a>
-                </li>
-                <li>
-                    <a href="{{ route('domains.index') }}">Domains</a>
-                </li>
-            </ul>
-        </div>
+@extends('layouts.app')
 
-        <h1>Page Analyzer</h1>
-        <h3>Check web pages for free</h3>
-        <hr>
-
-         @if ($errors->any())
-            <div>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+@section('content')
+    <div class="container">
+        @include('flash::message')
+    </div>
+    <div class="jumbotron jumbotron-fluid bg-light">
+        <div class="container-lg">
+            <div class="row">
+                <div class="col-12 col-md-10 col-lg-8 mx-auto text-center text-dark">
+                    <h1 class="display-3">Page Analyzer</h1>
+                    <p class="lead">Check web pages for free</p>
+                    {{ Form::open(array_merge(['url' => route('store')], ['class' => 'd-flex justify-content-center'])) }}
+                        {{ Form::text('name', '', array_merge(['class' => 'form-control form-control-lg'], ['placeholder' => 'https://www.example.com'])) }}
+                        {{ Form::submit('Add', ['class' => 'btn btn-lg btn-primary ml-3 px-5 text-uppercase']) }}
+                    {{ Form::close() }}
+                </div>
             </div>
-        @endif
-
-        {{ Form::open(['url' => route('store')]) }}
-            {{ Form::text('name', '', array('placeholder'=>'https://www.example.com')) }}
-            {{ Form::submit('Add') }}
-        {{ Form::close() }}
-
-        <script src="//code.jquery.com/jquery.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-        <script>
-            $('#flash-overlay-modal').modal();
-        </script>
-
-    </body>
-</html>
+        </div>
+    </div>
+@endsection

@@ -1,42 +1,25 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Laravel</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    </head>
+@extends('layouts.app')
 
-    <body>
-        <div>
-            <ul>
-                <li>
-                    <a href="{{ route('index') }}">Home</a>
-                </li>
-                <li>
-                    <a href="{{ route('domains.index') }}">Domains</a>
-                </li>
-            </ul>
-        </div>
-        <h1>Domains</h1>
-
-        <table class="table">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Сheck date</th>
-            </tr>
-            @foreach($domains as $domain)
+@section('content')
+    <div class="container-lg">
+        <h1 class="mt-5 mb-3">Domains</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-nowrap">
                 <tr>
-                    <td>{{ $domain->id }}</td>
-                    <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
-                    <td>{{ $timeLastChecks['id' . $domain->id] }}</td>
+                    <th class='text-center'>ID</th>
+                    <th>Name</th>
+                    <th class='text-center'>Сheck date</th>
+                    <th class='text-center'>Status code</th>
                 </tr>
-            @endforeach
-        <script src="//code.jquery.com/jquery.js"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-        <script>
-            $('#flash-overlay-modal').modal();
-        </script>
-
-    </body>
-</html>
+                @foreach($domains as $domain)
+                    <tr>
+                        <td class='text-center'>{{ $domain->id }}</td>
+                        <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
+                        <td>{{ $lastChecks[$domain->id]->created_at ?? ''}} </td>
+                        <td class='text-center'>{{ $lastChecks[$domain->id]->status_code ?? ''}} </td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+@endsection

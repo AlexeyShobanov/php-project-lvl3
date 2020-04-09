@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class WelcomeController extends Controller
 {
@@ -35,18 +36,19 @@ class WelcomeController extends Controller
      */
     public function store(Request $request)
     {
-        $url = $this->validate($request, [
-            //'name' => 'required|unique:domains|min:3'
-            'name' => 'required|min:3'
-        ]);
-
-        if (!$url['name']) {
-            flash('Not a valid url')->error();
+        try {
+            $domain = $this->validate($request, [
+                'name' => 'required|min:10'
+            ]);
+        } catch (ValidationException $e) {
+            $messages = $e->validator->errors()->messages();
+            $msg = implode(', ', array_values($messages['name']));
+            flash($msg)->error();
             return redirect()
             ->route('index');
         }
 
-        $parsedUrl = parse_url($url['name']);
+        $parsedUrl = parse_url($domain['name']);
 
         $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
         $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
@@ -67,9 +69,7 @@ class WelcomeController extends Controller
         $domain = new Domain();
         $domain->name = $normalizedUrl;
         $domain->save();
-        /*DB::table('domains')->insert(
-            ['name' => $normalizedUrl]
-        );*/
+
         flash('Url added successfully')->success();
 
         return redirect()

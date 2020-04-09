@@ -17,19 +17,12 @@ class DomainController extends Controller
         $domains = \DB::table('domains')
         ->groupBy('id')
         ->get();
-        $timeLastChecks = $domains->reduce(
-            function ($acc, $domain) {
-                $timeLastCheck = \DB::table('domain_checks')
-                ->where('domain_id', $domain->id)
-                ->max('updated_at');
-                return array_merge($acc, ['id' . strval($domain->id) => $timeLastCheck]);
-            },
-            []
-        );
-        /* $lastChecks = \DB::table('domain_checks')->
-        select('domain_id', DB::raw('max(created_at) as created_at'))->
-        groupBy('domain_id')->get(); */
-        return view('domain.index', compact('domains', 'timeLastChecks'));
+        $lastChecks = \DB::table('domain_checks')
+        ->select('domain_id', 'status_code', \DB::raw('max(created_at) as created_at'))
+        ->groupBy('domain_id')
+        ->get()
+        ->keyBy('domain_id');
+        return view('domain.index', compact('domains', 'lastChecks'));
     }
 
     /**
