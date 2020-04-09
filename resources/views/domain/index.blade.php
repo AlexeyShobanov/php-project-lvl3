@@ -13,10 +13,7 @@
                 </tr>
                 @foreach($domains as $domain)
                     <tr>
-                        <td class='text-center'>{{ $domain->id }}</td>
-                        <td><a href="{{ route('domains.show', $domain->id) }}">{{ $domain->name }}</a></td>
-                        <td>{{ $lastChecks[$domain->id]->created_at ?? ''}} </td>
-                        <td class='text-center'>{{ $lastChecks[$domain->id]->status_code ?? ''}} </td>
+                        
                     </tr>
                 @endforeach
             </table>
