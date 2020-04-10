@@ -63,7 +63,9 @@ class DomainCheckController extends Controller
         }
         $document = new Document($response->body());
         $statusCode = $response->status();
-        $h1 = $document->has('h1') ? mb_strimwidth($document->first('h1')->text(), 0, 255) : null;
+        $h1 = $document->has('h1') ?
+        mb_strimwidth($document->first('h1')->text(), 0, 255) :
+        null;
         $keywords = $document->has('meta[name="keywords"]') ?
         $document->first('meta[name="keywords"]')->getAttribute('content') :
         null;
