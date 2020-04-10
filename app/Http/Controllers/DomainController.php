@@ -21,7 +21,7 @@ class DomainController extends Controller
         $lastChecks = \DB::table('domains')->find(1) ?
         \DB::table('domain_checks')
         ->select('domain_id', 'status_code', \DB::raw('max(created_at) as created_at'))
-        ->groupBy('domain_id')
+        ->groupBy('domain_id', 'status_code')
         ->get()
         ->keyBy('domain_id') :
         null;
