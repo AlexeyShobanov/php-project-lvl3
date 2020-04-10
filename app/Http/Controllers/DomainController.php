@@ -17,11 +17,14 @@ class DomainController extends Controller
         $domains = \DB::table('domains')
         ->groupBy('id')
         ->get();
-        $lastChecks = \DB::table('domain_checks')
+
+        $lastChecks = \DB::table('domains')->find(1) ?
+        \DB::table('domain_checks')
         ->select('domain_id', 'status_code', \DB::raw('max(created_at) as created_at'))
         ->groupBy('domain_id')
         ->get()
-        ->keyBy('domain_id');
+        ->keyBy('domain_id') :
+        null;
         return view('domain.index', compact('domains', 'lastChecks'));
     }
 
