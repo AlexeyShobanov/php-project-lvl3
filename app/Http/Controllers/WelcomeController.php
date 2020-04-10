@@ -38,12 +38,10 @@ class WelcomeController extends Controller
     {
         try {
             $domain = $this->validate($request, [
-                'name' => 'required|min:10'
+                'name' => 'required'
             ]);
         } catch (ValidationException $e) {
-            $messages = $e->validator->errors()->messages();
-            $msg = implode(', ', array_values($messages['name']));
-            flash($msg)->error();
+            flash('Enter the url of the Internet resource')->error();
             return redirect()
             ->route('index');
         }
