@@ -16,15 +16,15 @@ class DomainController extends Controller
     public function index()
     {
         $domains = \DB::table('domains')
-        ->groupBy('id')
-        ->get();
+            ->groupBy('id')
+            ->get();
 
         $lastChecks = \DB::table('domains')->find(1) ?
         \DB::table('domain_checks')
-        ->select('domain_id', 'status_code', \DB::raw('max(created_at) as created_at'))
-        ->groupBy('domain_id', 'status_code')
-        ->get()
-        ->keyBy('domain_id') :
+            ->select('domain_id', 'status_code', \DB::raw('max(created_at) as created_at'))
+            ->groupBy('domain_id', 'status_code')
+            ->get()
+            ->keyBy('domain_id') :
         null;
         return view('domain.index', compact('domains', 'lastChecks'));
     }
@@ -42,15 +42,18 @@ class DomainController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         try {
-            $domain = $this->validate($request, [
-                'name' => 'required'
-            ]);
+            $domain = $this->validate(
+                $request,
+                [
+                    'name' => 'required'
+                ]
+            );
         } catch (ValidationException $e) {
             flash('Enter the url of the Internet resource')->error();
             return redirect()
@@ -88,7 +91,7 @@ class DomainController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Domain $domain
      * @return \Illuminate\Http\Response
      */
     public function show(Domain $domain)
@@ -99,7 +102,7 @@ class DomainController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Domain $domain
      * @return \Illuminate\Http\Response
      */
     public function edit(Domain $domain)
@@ -110,8 +113,8 @@ class DomainController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Domain  $domain
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Domain              $domain
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Domain $domain)
@@ -122,7 +125,7 @@ class DomainController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Domain $domain
      * @return \Illuminate\Http\Response
      */
     public function destroy(Domain $domain)

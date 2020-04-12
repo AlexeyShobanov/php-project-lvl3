@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Domain;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class DomainCheckControllerTest extends TestCase
 {
@@ -26,13 +25,15 @@ class DomainCheckControllerTest extends TestCase
 
     public function testStore()
     {
-        $partsOfPath = [__DIR__, '..', 'fixtures', 'body.html'];
+        $partsOfPath = [__DIR__, '..', 'fixtures', 'test.html'];
         $modifyPath = implode(DIRECTORY_SEPARATOR, $partsOfPath);
-        $body = file_get_contents($modifyPath);
+        $html = file_get_contents($modifyPath);
 
-        Http::fake([
-            $this->domain->name => Http::response($body, 200, ['Headers']),
-        ]);
+        Http::fake(
+            [
+                $this->domain->name => Http::response($html, 200, ['Headers']),
+            ]
+        );
 
         $paramsForCheck = array_merge($this->params, ['domain_id' => $this->domain->id]);
 

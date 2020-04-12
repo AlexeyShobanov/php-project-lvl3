@@ -4,12 +4,18 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Domain;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 
 class DomainControllerTest extends TestCase
 {
-    private const DOMAIN = ['name' => 'https://ru.hexlet.io'];
+    private const DOMAIN_RU = ['name' => 'https://ru.hexlet.io'];
+    private const DOMAIN_EN = ['name' => 'https://en.hexlet.io'];
+    private $id;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->id = \DB::table('domains')->insertGetId(self::DOMAIN_EN);
+    }
 
     public function testIndex()
     {
@@ -19,16 +25,18 @@ class DomainControllerTest extends TestCase
 
     public function testStore()
     {
-        $response = $this->post(route('domains.store'), ['name' => self::DOMAIN['name']]);
+        $response = $this->post(route('domains.store'), ['name' => self::DOMAIN_EN['name']]);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
-        $this->assertDatabaseHas('domains', self::DOMAIN);
+        $response = $this->post(route('domains.store'), ['name' => self::DOMAIN_RU['name']]);
+        $response->assertSessionHasNoErrors();
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('domains', self::DOMAIN_RU);
     }
 
     public function testShow()
     {
-        $domain = factory(Domain::class)->create(['name' => self::DOMAIN['name']]);
-        $response = $this->get(route('domains.show', ['domain' => $domain->id]));
+        $response = $this->get(route('domains.show', ['domain' => $this->id]));
         $response->assertStatus(200);
     }
 }
