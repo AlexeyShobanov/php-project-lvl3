@@ -14,7 +14,7 @@ class DomainControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->id = \DB::table('domains')->insertGetId(self::DOMAIN_EN);
+        $this->id = factory(Domain::class)->create(self::DOMAIN_EN)->id;
     }
 
     public function testIndex()
@@ -25,9 +25,6 @@ class DomainControllerTest extends TestCase
 
     public function testStore()
     {
-        $response = $this->post(route('domains.store'), ['name' => self::DOMAIN_EN['name']]);
-        $response->assertSessionHasNoErrors();
-        $response->assertStatus(302);
         $response = $this->post(route('domains.store'), ['name' => self::DOMAIN_RU['name']]);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302);

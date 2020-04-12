@@ -5,11 +5,11 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Domain;
 
-class WelcomeControllerTest extends TestCase
+class WelcomeTest extends TestCase
 {
     public function testIndex()
     {
-        $response = $this->get(route('index'));
+        $response = $this->get('/');
         $response->assertStatus(200);
     }
 }

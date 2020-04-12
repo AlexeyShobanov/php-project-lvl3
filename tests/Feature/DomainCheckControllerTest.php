@@ -42,9 +42,4 @@ class DomainCheckControllerTest extends TestCase
         $response->assertStatus(302);
         $this->assertDatabaseHas('domain_checks', $paramsForCheck);
     }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
 }

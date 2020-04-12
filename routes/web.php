@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/', 'WelcomeController');
-Route::resource('/domains', 'DomainController');
-Route::resource('/domains.checks', 'DomainCheckController');
+Route::get('/', function () {
+    return view('welcome');
+});
+Route::resource('/domains', 'DomainController')->only([
+    'index', 'show', 'store'
+]);
+Route::resource('/domains.checks', 'DomainCheckController')->only([
+    'store'
+]);
