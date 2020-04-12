@@ -1,6 +1,6 @@
 setup:
 	composer install
-	cp -n .env.example .env
+	cp -n .env.example .env.testing
 	php artisan key:gen --ansi
 	touch database/database.sqlite || true
 	php artisan migrate
@@ -15,6 +15,7 @@ console:
 	php artisan tinker
 
 test:
+	php artisan config:clear
 	php artisan test
 
 deploy:
