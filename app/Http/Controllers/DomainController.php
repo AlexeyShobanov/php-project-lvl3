@@ -35,8 +35,7 @@ class DomainController extends Controller
             );
         } catch (ValidationException $e) {
             flash('Enter the url of the Internet resource')->error();
-            return redirect()
-            ->route('index');
+             return view('welcome');
         }
 
         $parsedUrl = parse_url($domain['name']);
@@ -45,14 +44,14 @@ class DomainController extends Controller
         $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
         if (!$scheme && !$host) {
             flash('Not a valid url')->error();
-            return view('welcome');
+            return view('welcome', ['url' => $domain['name']]);
         }
 
         $normalizedUrl = $scheme . $host;
 
         if (!empty(\DB::table('domains')->where('name', $normalizedUrl)->get()->all())) {
             flash('Url already added')->warning();
-            return view('welcome');
+            return view('welcome', ['url' => $domain['name']]);
         }
 
         $domain = new Domain();

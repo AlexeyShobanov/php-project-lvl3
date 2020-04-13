@@ -11,7 +11,7 @@
                     <h1 class="display-3">Page Analyzer</h1>
                     <p class="lead">Check web pages for free</p>
                     {{ Form::open(array_merge(['url' => route('domains.store')], ['class' => 'd-flex justify-content-center'])) }}
-                        {{ Form::text('name', '', array_merge(['class' => 'form-control form-control-lg'], ['placeholder' => 'https://www.example.com'])) }}
+                        {{ Form::text('name', $url ?? '', array_merge(['class' => 'form-control form-control-lg'], ['placeholder' => 'https://www.example.com'])) }}
                         {{ Form::submit('Add', ['class' => 'btn btn-lg btn-primary ml-3 px-5 text-uppercase']) }}
                     {{ Form::close() }}
                 </div>
