@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Domain;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class DomainController extends Controller
@@ -11,33 +12,27 @@ class DomainController extends Controller
     public function index()
     {
         $domains = \DB::table('domains')
-            ->groupBy('id')
             ->get();
 
-        $lastChecks = \DB::table('domains')->find(1) ?
-        \DB::table('domain_checks')
+        $lastChecks = \DB::table('domain_checks')
             ->select('domain_id', 'status_code', \DB::raw('max(created_at) as created_at'))
             ->groupBy('domain_id', 'status_code')
             ->get()
-            ->keyBy('domain_id') :
-        null;
+            ->keyBy('domain_id');
         return view('domain.index', compact('domains', 'lastChecks'));
     }
 
     public function store(Request $request)
     {
-        try {
-            $domain = $this->validate(
-                $request,
-                [
-                    'name' => 'required'
-                ]
-            );
-        } catch (ValidationException $e) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required'
+        ]);
+        if ($validator->fails()) {
             flash('Enter the url of the Internet resource')->error();
-             return redirect()
+            return redirect()
             ->route('welcome');
         }
+        $domain = $validator->valid();
 
         $parsedUrl = parse_url($domain['name']);
 

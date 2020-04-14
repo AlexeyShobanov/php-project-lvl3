@@ -7,9 +7,9 @@ use App\DomainCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
-use Illuminate\Http\Client\ConnectionException;
 use DiDom\Document;
 use DiDom\Query;
+use Exception;
 
 class DomainCheckController extends Controller
 {
@@ -17,32 +17,22 @@ class DomainCheckController extends Controller
     {
         try {
             $response = Http::get($domain->name);
-        } catch (ConnectionException $e) {
-            flash('Connection timed out')->error();
-            return redirect()
-            ->route('domains.show', compact('domain'));
-        }
-        if ($response->clientError()) {
-            flash('Status code 400: Bad Request')->error();
-            return redirect()
-            ->route('domains.show', compact('domain'));
-        }
-        if ($response->serverError()) {
-            flash('Status code 500: Internal Server Error')->error();
+            if ($response->clientError()) {
+                throw new Exception('Status code 400: Bad Request');
+            }
+            if ($response->serverError()) {
+                throw new Exception('Status code 500: Internal Server Error');
+            }
+        } catch (Exception $e) {
+            flash('Something was wrong')->error();
             return redirect()
             ->route('domains.show', compact('domain'));
         }
         $document = new Document($response->body());
         $statusCode = $response->status();
-        $h1 = $document->has('h1') ?
-        mb_strimwidth($document->first('h1')->text(), 0, 255) :
-        null;
-        $keywords = $document->has('meta[name="keywords"]') ?
-        $document->first('meta[name="keywords"]')->getAttribute('content') :
-        null;
-        $description = $document->has('meta[name="description"]') ?
-        $document->first('meta[name="description"]')->getAttribute('content') :
-        null;
+        $h1 = mb_strimwidth(optional($document->first('h1'))->text(), 0, 255);
+        $keywords = optional($document->first('meta[name="keywords"]'))->getAttribute('content');
+        $description = optional($document->first('meta[name="description"]'))->getAttribute('content');
         $params = [
             'status_code' => $statusCode,
             'h1' => $h1,

@@ -13,9 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-}) -> name('welcome');
+Route::get('/', 'WelcomeController@index')
+    ->name('welcome');
 Route::resource('/domains', 'DomainController')->only([
     'index', 'show', 'store'
 ]);
