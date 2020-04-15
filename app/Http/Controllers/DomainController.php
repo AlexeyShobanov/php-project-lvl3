@@ -25,31 +25,22 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required'
+            'name' => 'required|url|max:255'
         ]);
         if ($validator->fails()) {
-            flash('Enter the url of the Internet resource')->error();
+            flash('Not a valid url')->error();
             return redirect()
             ->route('welcome');
         }
         $domain = $validator->valid();
-
         $parsedUrl = parse_url($domain['name']);
+        $normalizedUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}";
 
-        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-        if (!$scheme && !$host) {
-            flash('Not a valid url')->error();
-            return redirect()
-            ->route('welcome', ['name' => $domain['name']]);
-        }
-
-        $normalizedUrl = $scheme . $host;
-
-        if (!empty(\DB::table('domains')->where('name', $normalizedUrl)->get()->all())) {
+        $existingDomain = \DB::table('domains')->where('name', $normalizedUrl)->first();
+        if ($existingDomain) {
             flash('Url already added')->warning();
             return redirect()
-            ->route('welcome', ['name' => $domain['name']]);
+            ->route('domains.show', ['domain' => $existingDomain->id]);
         }
 
         $domain = new Domain();

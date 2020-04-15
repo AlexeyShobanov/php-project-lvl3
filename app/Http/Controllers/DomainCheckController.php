@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
 use DiDom\Document;
 use DiDom\Query;
-use Exception;
+use Illuminate\Http\Client\ConnectionException;
 
 class DomainCheckController extends Controller
 {
@@ -17,16 +17,16 @@ class DomainCheckController extends Controller
     {
         try {
             $response = Http::get($domain->name);
-            if ($response->clientError()) {
-                throw new Exception('Status code 400: Bad Request');
-            }
-            if ($response->serverError()) {
-                throw new Exception('Status code 500: Internal Server Error');
-            }
-        } catch (Exception $e) {
-            flash('Something was wrong')->error();
+        } catch (ConnectionException $e) {
+            flash('Request timed out')->error();
             return redirect()
             ->route('domains.show', compact('domain'));
+        }
+        if ($response->clientError()) {
+            flash('Status code 40x: Bad Request')->warning();
+        }
+        if ($response->serverError()) {
+            flash('Status code 50x: Internal Server Error')->warning();
         }
         $document = new Document($response->body());
         $statusCode = $response->status();
@@ -41,6 +41,8 @@ class DomainCheckController extends Controller
         ];
         $check = $domain->checks()->make($params);
         $check->save();
+
+        flash('Url verification completed')->success();
 
         return redirect()
             ->route('domains.show', compact('domain'));

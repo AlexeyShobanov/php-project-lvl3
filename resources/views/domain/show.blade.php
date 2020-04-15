@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
+@section('title', 'Domain Name')
+
 @section('content')
-    <div class="container">
-        @include('flash::message')
-    </div>
     <div class="container-lg">
         <h1 class="mt-5 mb-3">{{$domain->name}}</h1>
         <div class="table-responsive">

@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
+@section('title', 'Page Analyzer')
+
 @section('content')
-    <div class="container">
-        @include('flash::message')
-    </div>
     <div class="jumbotron jumbotron-fluid bg-light">
         <div class="container-lg">
             <div class="row">
