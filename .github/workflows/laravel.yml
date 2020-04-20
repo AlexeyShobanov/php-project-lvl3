@@ -50,6 +50,6 @@ jobs:
       with:
         coverageCommand: make coverage
         coverageLocations: [
-          "coverage-clover": type,
-          "./build/logs/clover.xml": lcov
+          coverage-clover: type,
+          ./build/logs/clover.xml: lcov
         ]
