@@ -18,6 +18,9 @@ console:
 test:
 	php artisan test
 
+coverage:
+	vendor/bin/phpunit
+
 deploy:
 	git push heroku
 
