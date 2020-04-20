@@ -26,10 +26,9 @@ jobs:
     - name: Test
       run: make test
 
-   
-coverage:
+  coverage:
+
     needs: [ laravel-tests ]
-    name: coverage
     runs-on: ubuntu-latest
 
     steps:
