@@ -15,8 +15,9 @@ class DomainController extends Controller
             ->get();
 
         $lastChecks = \DB::table('domain_checks')
-            ->select('domain_id', 'status_code', \DB::raw('max(created_at) as created_at'))
-            ->groupBy('domain_id', 'status_code')
+            ->distinct('domain_id')
+            ->orderBy('domain_id')
+            ->orderBy('created_at', 'desc')
             ->get()
             ->keyBy('domain_id');
         return view('domain.index', compact('domains', 'lastChecks'));

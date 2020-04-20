@@ -40,9 +40,6 @@ jobs:
     - name: Setup project
       run: make setup
 
-    - name: Check lint
-      run: make lint
-
     - name: Make & Publish code coverage
       uses: paambaati/codeclimate-action@v2.5.7
       env:

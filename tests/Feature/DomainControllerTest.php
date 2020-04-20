@@ -14,7 +14,7 @@ class DomainControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->id = factory(Domain::class)->create(self::DOMAIN_EN)->id;
+        $this->domain = factory(Domain::class)->create(self::DOMAIN_EN);
     }
 
     public function testIndex()
@@ -33,7 +33,7 @@ class DomainControllerTest extends TestCase
 
     public function testShow()
     {
-        $response = $this->get(route('domains.show', ['domain' => $this->id]));
+        $response = $this->get(route('domains.show', ['domain' => $this->domain]));
         $response->assertStatus(200);
     }
 }
