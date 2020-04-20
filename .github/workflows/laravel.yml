@@ -49,4 +49,7 @@ jobs:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       with:
         coverageCommand: make coverage
-        coverageLocations: "./build/logs/clover.xml"
+        coverageLocations: [
+          "coverage-clover": type,
+          "./build/logs/clover.xml": lcov
+        ]
