@@ -18,7 +18,7 @@ class DomainCheckController extends Controller
         try {
             $response = Http::get($domain->name);
         } catch (ConnectionException $e) {
-            flash('Request timed out')->error();
+            flash('Unable to access site')->error();
             return redirect()
             ->route('domains.show', compact('domain'));
         }

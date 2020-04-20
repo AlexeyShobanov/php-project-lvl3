@@ -16,7 +16,6 @@ console:
 	php artisan tinker
 
 test:
-	php artisan config:clear
 	php artisan test
 
 deploy:
