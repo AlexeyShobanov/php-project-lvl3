@@ -9,7 +9,7 @@ class DomainControllerTest extends TestCase
 {
     private const DOMAIN_RU = ['name' => 'https://ru.hexlet.io'];
     private const DOMAIN_EN = ['name' => 'https://en.hexlet.io'];
-    private $id;
+    private $domain;
 
     protected function setUp(): void
     {
